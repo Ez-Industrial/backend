@@ -6,7 +6,7 @@ app.use(express.json());
 app.use(cors());
 
 const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Servidor corriendo en https://backend-one-psi-28.vercel.app`));
 
 const Joi = require("joi");
 
