@@ -14,7 +14,7 @@ const usuarioSchema = Joi.object({
     nombre: Joi.string().min(3).max(50).required()
 });
 
-app.post("/usuarios", async (req, res) => {
+app.post("/api/usuarios", async (req, res) => {
     const { error } = usuarioSchema.validate(req.body);
 
     if (error) {
@@ -30,9 +30,14 @@ app.post("/usuarios", async (req, res) => {
     }
 });
 
-app.get("/usuarios", async (req, res) => {
+app.get("/api/usuarios", async (req, res) => {
     try {
         const snapshot = await db.collection("usuarios").get();
+
+         if (snapshot.empty) {
+            return res.status(404).json({ error: "No hay usuarios registrados" });
+        }
+        
         const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
         // Construir HTML con estilos personalizados
@@ -64,8 +69,6 @@ app.get("/usuarios", async (req, res) => {
         res.status(500).send("<h1>Error interno del servidor</h1>");
     }
 });
-
-app.use(express.json()); // Asegura que Express pueda leer JSON
 
 app.post("/api/test", async (req, res) => {
   try {
