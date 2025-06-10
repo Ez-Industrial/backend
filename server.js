@@ -4,9 +4,10 @@ const { db, asignarRol } = require("./config/firebaseAdmin.js");
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+const BACKEND_URL = process.env.BACKEND_URL || "https://washwheels.vercel.app";
 const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => console.log(`🚀 Servidor corriendo en https://backend-one-psi-28.vercel.app`));
+
+app.listen(PORT, () => console.log(`🚀 Backend corriendo en ${BACKEND_URL}`));
 
 const Joi = require("joi");
 
