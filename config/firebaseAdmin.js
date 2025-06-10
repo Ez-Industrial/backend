@@ -3,8 +3,7 @@ const require = createRequire(import.meta.url);  // 🔥 Esto permite usar `requ
 
 
 const admin = require("firebase-admin");
-const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
-
+const serviceAccount = process.env.SERVICE_ACCOUNT_KEY ? JSON.parse(process.env.SERVICE_ACCOUNT_KEY) : null;
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
