@@ -6,8 +6,7 @@ app.use(express.json());
 app.use(cors());
 const BACKEND_URL = process.env.BACKEND_URL || "https://washwheels.vercel.app";
 const PORT = process.env.PORT || 8081;
-
-app.listen(PORT, () => console.log(`🚀 Backend corriendo en ${BACKEND_URL}`));
+app.listen(PORT, () => console.log(`🚀 Backend corriendo en el puerto ${PORT}`));
 
 const Joi = require("joi");
 
@@ -88,8 +87,7 @@ app.post("/api/test", async (req, res) => {
 
 app.get('/', (req, res) => {
   console.log('R');
-  res.json({ mensaje: 'A' });
-
+ res.send("<h1>¡Bienvenido a WashWheels!</h1><p>El backend está funcionando correctamente.</p>");
 });
 
 app.get("/mensajes", async (req, res) => {
