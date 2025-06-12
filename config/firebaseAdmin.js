@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, ".env") });
 
 const decodedKeyStr = Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString("utf8");
-const serviceAccount = JSON.parse(decoded);
+const serviceAccount = JSON.parse(decodedKeyStr);
 
 console.log("Directorio de firebaseAdmin.js:", __dirname);
 console.log("Directorio de ejecución (process.cwd()):", process.cwd());
