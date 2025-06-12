@@ -1,5 +1,3 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);  
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -11,20 +9,15 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: path.join(__dirname, ".env") });
 
+const decodedKeyStr = Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString("utf8");
+const serviceAccount = JSON.parse(decoded);
+
 console.log("Directorio de firebaseAdmin.js:", __dirname);
 console.log("Directorio de ejecución (process.cwd()):", process.cwd());
 console.log("SERVICE_ACCOUNT_KEY:", process.env.SERVICE_ACCOUNT_KEY || "⚠️ Variable no definida");
 
 if (!process.env.SERVICE_ACCOUNT_KEY) {
   throw new Error("SERVICE_ACCOUNT_KEY no está definida. Revisa el archivo .env y la ruta.");
-}
-
-const decodedKeyStr = Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString("utf8");
-let serviceAccount;
-try {
-  serviceAccount = JSON.parse(decodedKeyStr);
-} catch (error) {
-  throw new Error("Error al parsear SERVICE_ACCOUNT_KEY: " + error);
 }
 
 admin.initializeApp({

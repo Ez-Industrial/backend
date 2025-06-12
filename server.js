@@ -1,17 +1,22 @@
-const express = require("express");
-const cors = require("cors");
-const { db, asignarRol } = require("./config/firebaseAdmin.js");
-const app = express();
+import express from "express";
+import cors from "cors";
+import { db, asignarRol } from "./config/firebaseAdmin.js";const app = express();
+import Joi from "joi";
+import dotenv from "dotenv";
+
+dotenv.config();      
 app.use(express.json());
 app.use(cors());
-const BACKEND_URL = process.env.BACKEND_URL || "https://washwheels.vercel.app";
-const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => console.log(`🚀 Backend corriendo en el puerto ${PORT}`));
 
-const Joi = require("joi");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
+const PORT        = process.env.PORT || 8081;
 
 const usuarioSchema = Joi.object({
     nombre: Joi.string().min(3).max(50).required()
+});
+
+app.get('/', (req, res) => {
+ res.send("<h1>¡Bienvenido a WashWheels en Vercel!</h1><p>El backend está funcionando correctamente.</p>");
 });
 
 app.post("/api/usuarios", async (req, res) => {
@@ -85,11 +90,6 @@ app.post("/api/test", async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  console.log('R');
- res.send("<h1>¡Bienvenido a WashWheels!</h1><p>El backend está funcionando correctamente.</p>");
-});
-
 app.get("/mensajes", async (req, res) => {
   try {
     const querySnapshot = await db.collection("mensajes").get();
@@ -123,3 +123,12 @@ app.get('/usuario/rol', (req, res) => {
   console.log('Mandando rol de usuario');
   res.json({ mensaje: 'eres admin' });
 });
+
+app.listen(PORT, () => console.log(`🚀 Backend funcionando`));
+
+// LOCAL → escucha en un puerto
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () =>
+    console.log(`🚀 Backend corriendo en http://localhost:${PORT}`)
+  );
+}
