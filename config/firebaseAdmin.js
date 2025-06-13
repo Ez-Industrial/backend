@@ -1,13 +1,21 @@
+console.log("▶️  [firebaseAdmin.js] arrancó");
 import admin from "firebase-admin";
 import { serviceAccount } from "./firebase.js";
 
+console.log("📦 serviceAccount recibido en Admin:", typeof serviceAccount !== "undefined" ? "OK" : "defined");
+console.log("⚙️  admin.apps.length:", admin.apps.length);
+console.log("🛠  serviceAccount importado:", !!serviceAccount);
+
+
 // Evitar doble inicialización
 if (!admin.apps.length) {
+    console.log("✅  No hay apps inicializadas, voy a inicializar Firebase");
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://wash-wheels.firebaseio.com"
   });
   console.log("🔥 Firebase Admin inicializado correctamente.");
+
 }
 
 const db = admin.firestore();

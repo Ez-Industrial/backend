@@ -1,3 +1,4 @@
+console.log("▶️ server.js arrancó");
 import express from "express";
 import cors from "cors";
 import { db, asignarRol } from "./config/firebaseAdmin.js";const app = express();
