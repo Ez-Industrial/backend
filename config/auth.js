@@ -1,6 +1,8 @@
 import { admin } from "./firebaseAdmin.js";
 
 export async function authenticate(req, res, next) {
+   console.log("🔑 authenticate header:", req.headers.authorization);
+
   try {
     const authHeader = req.headers.authorization || "";
     const match = authHeader.match(/^Bearer (.+)$/);
