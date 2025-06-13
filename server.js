@@ -126,8 +126,9 @@ app.get('/usuario/rol', (req, res) => {
 });
 
 // LOCAL → escucha en un puerto
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () =>
-    console.log(`🚀 Backend corriendo en http://localhost:${PORT}`)
-  );
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => console.log(`🚀 Backend corriendo en http://localhost:${PORT}`));
 }
+
+console.log("▶️ server.js arrancó – exportando app para Vercel");
+export default app;
