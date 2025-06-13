@@ -114,10 +114,20 @@ app.get("/mensajes/:uid", async (req, res) => {
   }
 });
 
-app.get('/api/test', (req, res) => {
-  console.log('Solicitud recibida en /api/test');
-  res.json({ mensaje: 'API funcionando' });
+app.get("/profile", authenticate, (req, res) => {
+  res.json({ uid: req.user.uid, email: req.user.email, role: req.user.role });
 });
+
+// Rutas sólo para admins  
+app.post(
+  "/admin/create",
+  authenticate,
+  authorizeRole("admin"),
+  async (req, res) => {
+    // aquí tu lógica de crear o asignar roles…
+    res.json({ ok: true });
+  }
+);
 
 app.get('/usuario/rol', (req, res) => {
   asignarRol("kV4o1NJ30pTszDxPd7Q8AbwU8fC2", "admin"); // Asigna el rol "admin" a este usuario
