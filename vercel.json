@@ -6,6 +6,5 @@
   "routes": [
     { "src": "/(.*)", "dest": "/server.js" }
   ],
-  "installCommand": "npm install --registry=https://registry.npmjs.org/",
-  "cacheDirectories": ["node_modules"]
+  "installCommand": "npm install --registry=https://registry.npmjs.org/"
 }
