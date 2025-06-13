@@ -124,8 +124,6 @@ app.get('/usuario/rol', (req, res) => {
   res.json({ mensaje: 'eres admin' });
 });
 
-app.listen(PORT, () => console.log(`🚀 Backend funcionando`));
-
 // LOCAL → escucha en un puerto
 if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () =>

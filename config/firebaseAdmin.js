@@ -1,21 +1,23 @@
 import admin from "firebase-admin";
+import { serviceAccount } from "./firebase.js";
 
-admin.initializeApp({
+// Evitar doble inicialización
+if (!admin.apps.length) {
+  admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://wash-wheels.firebaseio.com"
-});
-
-const db = admin.firestore();
-async function asignarRol(uid, rol) {
-    try {
-        await admin.auth().setCustomUserClaims(uid, { role: rol });
-        console.log(`✅ Rol "${rol}" asignado a usuario con UID: ${uid}`);
-    } catch (error) {
-        console.error("❌ Error al asignar rol:", error);
-    }
+  });
+  console.log("🔥 Firebase Admin inicializado correctamente.");
 }
 
-// Exportar Firestore y la función de asignación de roles
-export { db, asignarRol };
+const db = admin.firestore();
 
-console.log("🔥 Firebase Admin inicializado correctamente");
+export { db };
+export async function asignarRol(uid, rol) {
+  try {
+    await admin.auth().setCustomUserClaims(uid, { role: rol });
+    console.log(`✅ Rol "${rol}" asignado a usuario con UID: ${uid}`);
+  } catch (error) {
+    console.error("❌ Error al asignar rol:", error);
+  }
+}
