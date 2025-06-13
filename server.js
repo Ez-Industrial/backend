@@ -115,8 +115,10 @@ app.get("/mensajes/:uid", async (req, res) => {
   }
 });
 
+console.log("▶️ Registrando ruta GET /profile");
 app.get("/profile", authenticate, (req, res) => {
-  res.json({ uid: req.user.uid, email: req.user.email, role: req.user.role });
+    console.log("🔔 /profile entró con req.user:", req.user);
+  return res.json(req.user);
 });
 
 // Rutas sólo para admins  
