@@ -10,9 +10,9 @@ if (!admin.apps.length) {
     databaseURL: "https://wash-wheels.firebaseio.com"
   });
   console.log("🔥 Firebase Admin inicializado correctamente.");
-
 }
 
+export { admin }; 
 const db = admin.firestore();
 
 export { db };

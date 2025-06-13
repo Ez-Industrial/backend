@@ -1,5 +1,4 @@
-// backend/config/auth.js
-import { admin } from "./firebaseAdmin.js"; // o donde tengas tu instancia de admin
+import { admin } from "./firebaseAdmin.js";
 
 export async function authenticate(req, res, next) {
   try {
