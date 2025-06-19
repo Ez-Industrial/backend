@@ -5,6 +5,9 @@ import { db, asignarRol } from "./config/firebaseAdmin.js";const app = express()
 import Joi from "joi";
 import dotenv from "dotenv";
 import { authenticate, authorizeRole } from "./config/auth.js";
+import asignarRolRouter from "./config/roles.js";
+
+app.use("/api/roles", asignarRolRouter);
 
 dotenv.config();      
 app.use(express.json());
@@ -115,7 +118,6 @@ app.get("/mensajes/:uid", async (req, res) => {
   }
 });
 
-console.log("▶️ Registrando ruta GET /profile");
 app.get("/profile", authenticate, (req, res) => {
     console.log("🔔 /profile entró con req.user:", req.user);
   return res.json(req.user);
@@ -127,21 +129,18 @@ app.post(
   authenticate,
   authorizeRole("admin"),
   async (req, res) => {
-    // aquí tu lógica de crear o asignar roles…
     res.json({ ok: true });
   }
 );
 
 app.get('/usuario/rol', (req, res) => {
-  asignarRol("kV4o1NJ30pTszDxPd7Q8AbwU8fC2", "admin"); // Asigna el rol "admin" a este usuario
+  asignarRol("kV4o1NJ30pTszDxPd7Q8AbwU8fC2", "admin");
   console.log('Mandando rol de usuario');
   res.json({ mensaje: 'eres admin' });
 });
 
-// LOCAL → escucha en un puerto
 if (!process.env.VERCEL) {
   app.listen(PORT, () => console.log(`🚀 Backend corriendo en http://localhost:${PORT}`));
 }
 
-console.log("▶️ server.js arrancó – exportando app para Vercel");
 export default app;

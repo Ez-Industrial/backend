@@ -1,4 +1,3 @@
-console.log("▶️  [firebaseAdmin.js] arrancó");
 import admin from "firebase-admin";
 import { serviceAccount } from "./firebase.js";
 
