@@ -87,7 +87,7 @@ app.post("/api/test", async (req, res) => {
 
 app.get('/', (req, res) => {
   console.log('R');
-  res.json({ mensaje: 'A' });
+  res.json({ mensaje: 'Ax' });
 
 });
 
