@@ -95,15 +95,13 @@ app.post("/api/test", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-=======
+
 app.get('/', (req, res) => {
   console.log('R');
-  res.json({ mensaje: 'Ax' });
+  res.json({ mensaje: 'Love' });
 
 });
 
->>>>>>> recuperar-e7d-clean
 app.get("/mensajes", async (req, res) => {
   try {
     const querySnapshot = await db.collection("mensajes").get();
