@@ -1,6 +1,6 @@
 
 import express from "express";
-
+import { authenticate, authorizeRoles } from "../middlewares/auth.js";
 const router = express.Router();
 import { admin } from "./firebaseAdmin.js";
 
