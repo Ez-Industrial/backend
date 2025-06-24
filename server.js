@@ -5,8 +5,8 @@ import { db } from "./config/firebaseAdmin.js";
 import Joi from "joi";
 import dotenv from "dotenv";
 import { authenticate, authorizeRoles } from "./middlewares/auth.js";
-import asignarRol from "./config/roles.js";
-
+import asignarRol from "./rutas/roles.js";
+import usuariosRoutes from "./rutas/usuarios.js";
 
 dotenv.config();
 const app = express();
@@ -28,40 +28,39 @@ app.get('/', (req, res) => {
  res.send("<h1>¡Bienvenido a WashWheels en Vercel!</h1><p>El backend está funcionando correctamente.</p>");
 });
 
-app.post("/api/usuarios", async (req, res) => {
-    const { error } = usuarioSchema.validate(req.body);
-    if (error) {  return res.status(400).json({ error: error.details[0].message });  }
+app.use("/api/usuarios", usuariosRoutes);
+//app.post("/api/usuarios", async (req, res) => {
+//    const { error } = usuarioSchema.validate(req.body);
+//    if (error) {  return res.status(400).json({ error: error.details[0].message });  }
+//    try {
+//        const docRef = await db.collection("usuarios").add(req.body);
+//        res.status(200).json({ id: docRef.id, mensaje: "Usuario guardado con éxito" });
+//    } catch (error) {
+//        console.error("❌ Error al guardar en Firestore:", error);
+//        res.status(500).json({ error: "Error interno del servidor." });
+//    }
+//});
 
-    try {
-        const docRef = await db.collection("usuarios").add(req.body);
-        res.status(200).json({ id: docRef.id, mensaje: "Usuario guardado con éxito" });
-    } catch (error) {
-        console.error("❌ Error al guardar en Firestore:", error);
-        res.status(500).json({ error: "Error interno del servidor." });
-    }
-});
-
-app.get("/api/usuarios", async (req, res) => {
-  try {
-    const snapshot = await db.collection("usuarios").get();
-    const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-    const html = `
-      <html>
-        <head><title>Usuarios</title></head>
-        <body>
-          <h1>Lista de Usuarios</h1>
-          <ul>${usuarios.map(u => `<li>${u.nombre}</li>`).join("")}</ul>
-        </body>
-      </html>
-    `;
-
-    res.send(html);
-  } catch (err) {
-    console.error("Error al obtener usuarios:", err);
-    res.status(500).send("Error interno del servidor");
-  }
-});
+//app.get("/api/usuarios", async (req, res) => {
+//  try {
+//    const snapshot = await db.collection("usuarios").get();
+//    const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+//    const html = `
+//      <html>
+//        <head><title>Usuarios</title></head>
+//        <body>
+//          <h1>Lista de Usuarios</h1>
+//          <ul>${usuarios.map(u => `<li>${u.nombre}</li>`).join("")}</ul>
+//        </body>
+//      </html>
+//    `;
+//
+//    res.send(html);
+//  } catch (err) {
+//    console.error("Error al obtener usuarios:", err);
+//    res.status(500).send("Error interno del servidor");
+//  }
+//});
 
 
 

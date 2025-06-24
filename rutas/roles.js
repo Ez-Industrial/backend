@@ -2,12 +2,27 @@
 import express from "express";
 import { authenticate, authorizeRoles } from "../middlewares/auth.js";
 const router = express.Router();
-import { admin } from "./firebaseAdmin.js";
+import { admin } from "../config/firebaseAdmin.js";
+
+import { admin, db } from "../config/firebaseAdmin.js";
 
 export async function asignarRol(uid, rol) {
   try {
+    // 🔐 Asignar el custom claim
     await admin.auth().setCustomUserClaims(uid, { role: rol });
-    console.log(`✅ Rol "${rol}" asignado a usuario con UID: ${uid}`);
+    console.log(`✅ Rol "${rol}" asignado como claim`);
+
+    // 🔎 Buscar el documento en Firestore con ese UID
+    const snapshot = await db.collection("usuarios").where("uid", "==", uid).get();
+
+    if (!snapshot.empty) {
+      const docId = snapshot.docs[0].id;
+      await db.collection("usuarios").doc(docId).update({ rol });
+      console.log(`📝 Rol "${rol}" también guardado en Firestore`);
+    } else {
+      console.warn("⚠️ No se encontró documento del usuario en Firestore.");
+    }
+
   } catch (error) {
     console.error("❌ Error al asignar rol:", error);
     throw error;
