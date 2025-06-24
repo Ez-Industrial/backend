@@ -14,18 +14,16 @@ export async function asignarRol(uid, rol) {
   }
 }
 
-const rolesValidos = ["admin", "lavador", "cliente"];
-if (!rolesValidos.includes(rol)) {
-  return res.status(400).json({ error: "Rol no permitido." });
-} 
-
-router.post("/asignar-rol", authenticate, authorizeRoles("admin"), // solo admins pueden asignar
-  async (req, res) => {
+router.post("/asignar-rol", authenticate, authorizeRoles("admin"), async (req, res) => {
   const { uid, rol } = req.body;
 
   if (!uid || !rol) {
     return res.status(400).json({ error: "Faltan campos: uid y rol son requeridos." });
   }
+  const rolesValidos = ["admin", "lavador", "cliente"];
+  if (!rolesValidos.includes(rol)) {
+   return res.status(400).json({ error: "Rol no permitido." });
+   } 
 
   try {
     await asignarRol(uid, rol);
