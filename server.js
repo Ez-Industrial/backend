@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 8081;
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use("/asignar-rol", asignarRol);
+app.use("/api/roles", asignarRol);
 
 //Validación
 const usuarioSchema = Joi.object({
