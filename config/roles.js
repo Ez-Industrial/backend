@@ -1,5 +1,6 @@
-// routes/roles.js
+
 import express from "express";
+
 const router = express.Router();
 import { admin } from "./firebaseAdmin.js";
 
@@ -13,7 +14,13 @@ export async function asignarRol(uid, rol) {
   }
 }
 
-router.post("/asignar-rol", async (req, res) => {
+const rolesValidos = ["admin", "lavador", "cliente"];
+if (!rolesValidos.includes(rol)) {
+  return res.status(400).json({ error: "Rol no permitido." });
+} 
+
+router.post("/asignar-rol", authenticate, authorizeRoles("admin"), // solo admins pueden asignar
+  async (req, res) => {
   const { uid, rol } = req.body;
 
   if (!uid || !rol) {
