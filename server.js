@@ -4,7 +4,7 @@ import cors from "cors";
 import { db, asignarRol } from "./config/firebaseAdmin.js";const app = express();
 import Joi from "joi";
 import dotenv from "dotenv";
-import { authenticate, authorizeRole } from "./config/auth.js";
+import { authenticate, authorizeRole } from "./middlewares/auth.js";
 import asignarRolRouter from "./config/roles.js";
 
 app.use("/api/roles", asignarRolRouter);

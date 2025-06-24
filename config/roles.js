@@ -2,6 +2,17 @@
 import express from "express";
 import { asignarRol } from "./firebaseAdmin.js";
 const router = express.Router();
+import { admin } from "./firebaseAdmin.js";
+
+export async function asignarRol(uid, rol) {
+  try {
+    await admin.auth().setCustomUserClaims(uid, { role: rol });
+    console.log(`✅ Rol "${rol}" asignado a usuario con UID: ${uid}`);
+  } catch (error) {
+    console.error("❌ Error al asignar rol:", error);
+    throw error;
+  }
+}
 
 router.post("/asignar-rol", async (req, res) => {
   const { uid, rol } = req.body;
