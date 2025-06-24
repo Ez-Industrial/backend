@@ -14,9 +14,18 @@ router.post("/", async (req, res) => {
     const snapshot = await db.collection("usuarios").where("uid", "==", uid).get();
 
     if (!snapshot.empty) {
-      return res.status(200).json({ message: "El usuario ya existe en Firestore." });
+      // 🔁 Usuario existe → lo actualizamos
+      const docId = snapshot.docs[0].id;
+      await db.collection("usuarios").doc(docId).update({
+        nombre,
+        rol,
+        actualizado: new Date()
+      });
+
+      return res.status(200).json({ message: "Usuario actualizado correctamente." });
     }
 
+    // ✨ Usuario no existe → lo creamos
     await db.collection("usuarios").add({
       uid,
       nombre,
@@ -27,7 +36,7 @@ router.post("/", async (req, res) => {
     res.status(201).json({ message: "Usuario nuevo guardado con éxito." });
 
   } catch (error) {
-    console.error("❌ Error al guardar usuario:", error);
+    console.error("❌ Error al guardar/actualizar usuario:", error);
     res.status(500).json({ error: "Error del servidor." });
   }
 });
