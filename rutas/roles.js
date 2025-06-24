@@ -2,8 +2,6 @@
 import express from "express";
 import { authenticate, authorizeRoles } from "../middlewares/auth.js";
 const router = express.Router();
-import { admin } from "../config/firebaseAdmin.js";
-
 import { admin, db } from "../config/firebaseAdmin.js";
 
 export async function asignarRol(uid, rol) {
