@@ -1,35 +1,37 @@
 console.log("▶️ server.js arrancó");
 import express from "express";
 import cors from "cors";
-import { db } from "./config/firebaseAdmin.js";const app = express();
+import { db } from "./config/firebaseAdmin.js";
 import Joi from "joi";
 import dotenv from "dotenv";
 import { authenticate, authorizeRoles } from "./middlewares/auth.js";
 import asignarRol from "./config/roles.js";
 
-app.use("/api/roles", asignarRol);
 
-dotenv.config();      
-app.use(express.json());
+dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 8081;
+
+// Middlewares
 app.use(cors());
+app.use(express.json());
+app.use("/asignar-rol", asignarRol);
 
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
-const PORT        = process.env.PORT || 8081;
-
+//Validación
 const usuarioSchema = Joi.object({
     nombre: Joi.string().min(3).max(50).required()
 });
 
+//Rutas
 app.get('/', (req, res) => {
+ console.log('R');
+ res.json({ mensaje: 'Love' });
  res.send("<h1>¡Bienvenido a WashWheels en Vercel!</h1><p>El backend está funcionando correctamente.</p>");
 });
 
 app.post("/api/usuarios", async (req, res) => {
     const { error } = usuarioSchema.validate(req.body);
-
-    if (error) {
-        return res.status(400).json({ error: error.details[0].message });
-    }
+    if (error) {  return res.status(400).json({ error: error.details[0].message });  }
 
     try {
         const docRef = await db.collection("usuarios").add(req.body);
@@ -43,7 +45,6 @@ app.post("/api/usuarios", async (req, res) => {
 app.get("/api/usuarios", async (req, res) => {
     try {
         const snapshot = await db.collection("usuarios").get();
-
          if (snapshot.empty) {
             return res.status(404).json({ error: "No hay usuarios registrados" });
         }
@@ -88,28 +89,6 @@ app.get("/api/usuarios", async (req, res) => {
     }
 });
 
-app.post("/api/test", async (req, res) => {
-  try {
-    const { mensaje, uid } = req.body;
-    if (!uid) {
-      return res.status(400).json({ error: "UID del usuario es obligatorio" });
-    }
-
-    await db.collection("mensajes").add({ mensaje, uid, timestamp: new Date() });
-    res.json({ mensajeGuardado: mensaje });
-  } catch (error) {
-    console.error("Error guardando mensaje:", error);
-    res.status(500).json({ error: "Error guardando mensaje en Firebase" });
-  }
-});
-
-
-app.get('/', (req, res) => {
-  console.log('R');
-  res.json({ mensaje: 'Love' });
-
-});
-
 app.get("/mensajes", async (req, res) => {
   try {
     const querySnapshot = await db.collection("mensajes").get();
@@ -133,27 +112,28 @@ app.get("/mensajes/:uid", async (req, res) => {
   }
 });
 
+app.post("/api/test", async (req, res) => {
+  try {
+    const { mensaje, uid } = req.body;
+    if (!uid) return res.status(400).json({ error: "UID requerido" });
+
+    await db.collection("mensajes").add({ mensaje, uid, timestamp: new Date() });
+    res.json({ mensajeGuardado: mensaje });
+  } catch (err) {
+    console.error("Error guardando mensaje:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+});
+
 app.get("/profile", authenticate, (req, res) => {
-    console.log("🔔 /profile entró con req.user:", req.user);
   return res.json(req.user);
 });
 
-// Rutas sólo para admins  
-app.post(
-  "/admin/create",
-  authenticate,
-  authorizeRoles("admin"),
-  async (req, res) => {
+app.post( "/admin/create",  authenticate, authorizeRoles("admin"),  async (req, res) => {
     res.json({ ok: true });
-  }
-);
+  });
 
-app.get('/usuario/rol', (req, res) => {
-  asignarRol("kV4o1NJ30pTszDxPd7Q8AbwU8fC2", "admin");
-  console.log('Mandando rol de usuario');
-  res.json({ mensaje: 'eres admin' });
-});
-
+//Local 
 if (!process.env.VERCEL) {
   app.listen(PORT, () => console.log(`🚀 Backend corriendo en http://localhost:${PORT}`));
 }
