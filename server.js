@@ -25,7 +25,6 @@ const usuarioSchema = Joi.object({
 //Rutas
 app.get('/', (req, res) => {
  console.log('R');
- res.json({ mensaje: 'Love' });
  res.send("<h1>¡Bienvenido a WashWheels en Vercel!</h1><p>El backend está funcionando correctamente.</p>");
 });
 
