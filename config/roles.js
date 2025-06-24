@@ -1,6 +1,5 @@
 // routes/roles.js
 import express from "express";
-import { asignarRol } from "./firebaseAdmin.js";
 const router = express.Router();
 import { admin } from "./firebaseAdmin.js";
 

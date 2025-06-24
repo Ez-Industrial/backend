@@ -1,13 +1,13 @@
 console.log("▶️ server.js arrancó");
 import express from "express";
 import cors from "cors";
-import { db, asignarRol } from "./config/firebaseAdmin.js";const app = express();
+import { db } from "./config/firebaseAdmin.js";const app = express();
 import Joi from "joi";
 import dotenv from "dotenv";
-import { authenticate, authorizeRole } from "./middlewares/auth.js";
-import asignarRolRouter from "./config/roles.js";
+import { authenticate, authorizeRoles } from "./middlewares/auth.js";
+import asignarRol from "./config/roles.js";
 
-app.use("/api/roles", asignarRolRouter);
+app.use("/api/roles", asignarRol);
 
 dotenv.config();      
 app.use(express.json());
@@ -47,7 +47,15 @@ app.get("/api/usuarios", async (req, res) => {
          if (snapshot.empty) {
             return res.status(404).json({ error: "No hay usuarios registrados" });
         }
-        
+        try {
+         const res = await axios.get("/obtener-usuarios");
+         const usuarios = res.data;
+         // renderizas usuarios
+         } catch (error) {
+         console.error("Error cargando usuarios:", error);
+         setMensaje("❌ No se encontraron usuarios.");
+        }
+
         const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
         // Construir HTML con estilos personalizados
@@ -134,7 +142,7 @@ app.get("/profile", authenticate, (req, res) => {
 app.post(
   "/admin/create",
   authenticate,
-  authorizeRole("admin"),
+  authorizeRoles("admin"),
   async (req, res) => {
     res.json({ ok: true });
   }
