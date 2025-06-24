@@ -109,6 +109,11 @@ app.post( "/admin/create",  authenticate, authorizeRoles("admin"),  async (req, 
     res.json({ ok: true });
   });
 
+app.use((err, req, res, next) => {
+  console.error("❌ Error inesperado:", err.stack);
+  res.status(500).json({ error: "Algo salió mal en el servidor." });
+});
+
 //Local 
 if (!process.env.VERCEL) {
   app.listen(PORT, () => console.log(`🚀 Backend corriendo en http://localhost:${PORT}`));
