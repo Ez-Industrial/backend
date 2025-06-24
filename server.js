@@ -42,51 +42,28 @@ app.post("/api/usuarios", async (req, res) => {
 });
 
 app.get("/api/usuarios", async (req, res) => {
-    try {
-        const snapshot = await db.collection("usuarios").get();
-         if (snapshot.empty) {
-            return res.status(404).json({ error: "No hay usuarios registrados" });
-        }
-        try {
-         const res = await axios.get("/obtener-usuarios");
-         const usuarios = res.data;
-         // renderizas usuarios
-         } catch (error) {
-         console.error("Error cargando usuarios:", error);
-         setMensaje("❌ No se encontraron usuarios.");
-        }
+  try {
+    const snapshot = await db.collection("usuarios").get();
+    const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const html = `
+      <html>
+        <head><title>Usuarios</title></head>
+        <body>
+          <h1>Lista de Usuarios</h1>
+          <ul>${usuarios.map(u => `<li>${u.nombre}</li>`).join("")}</ul>
+        </body>
+      </html>
+    `;
 
-        // Construir HTML con estilos personalizados
-        const htmlResponse = `
-            <!DOCTYPE html>
-            <html lang="es">
-            <head>
-                <meta charset="UTF-8">
-                <title>Usuarios</title>
-                <style>
-                    body { font-family: 'Courier New', monospace; background-color: #f4f4f4; padding: 20px; }
-                    h1 { font-size: 24px; color: #333; }
-                    ul { list-style-type: none; padding: 0; }
-                    li { font-size: 18px; margin: 5px 0; }
-                </style>
-            </head>
-            <body>
-                <h1>Lista de Usuarios</h1>
-                <ul>
-                    ${usuarios.map(user => `<li>${user.nombre}</li>`).join("")}
-                </ul>
-            </body>
-            </html>
-        `;
-
-        res.send(htmlResponse);  // Devolver la respuesta con estilos
-    } catch (error) {
-        console.error("❌ Error al obtener usuarios:", error);
-        res.status(500).send("<h1>Error interno del servidor</h1>");
-    }
+    res.send(html);
+  } catch (err) {
+    console.error("Error al obtener usuarios:", err);
+    res.status(500).send("Error interno del servidor");
+  }
 });
+
+
 
 app.get("/mensajes", async (req, res) => {
   try {
