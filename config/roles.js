@@ -13,8 +13,8 @@ export async function asignarRol(uid, rol) {
     throw error;
   }
 }
-// authenticate, authorizeRoles("admin")
-router.post("/asignar-rol", async (req, res) => {
+
+router.post("/asignar-rol", authenticate, authorizeRoles("admin"), async (req, res) => {
   const { uid, rol } = req.body;
 
   if (!uid || !rol) {
