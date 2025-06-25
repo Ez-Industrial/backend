@@ -5,9 +5,9 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   console.log("▶️ Llega POST /api/usuarios:", req.body);
-  const { uid, nombre, rol } = req.body;
+  const { uid, nombre, email, rol } = req.body;
 
-  if (!uid || !nombre || !rol) {
+  if (!uid || !nombre || !email || !rol) {
     return res.status(400).json({ error: "Faltan campos requeridos." });
   }
 
@@ -19,6 +19,7 @@ router.post("/", async (req, res) => {
       const docId = snapshot.docs[0].id;
       await db.collection("usuarios").doc(docId).update({
         nombre,
+        email,
         rol,
         actualizado: new Date()
       });
@@ -30,6 +31,7 @@ router.post("/", async (req, res) => {
     await db.collection("usuarios").add({
       uid,
       nombre,
+      email,
       rol,
       creado: new Date()
     });
