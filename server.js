@@ -13,6 +13,14 @@ const PORT = process.env.PORT || 8081;
 
 // Middlewares
 app.use(cors());
+app.use((req, res, next) => {
+  let raw = "";
+  req.on("data", chunk => (raw += chunk));
+  req.on("end", () => {
+    console.log("💡 raw body recibido:", raw);
+    next();
+  });
+});
 app.use(express.json());
 app.use("/api/roles", asignarRol);
 
