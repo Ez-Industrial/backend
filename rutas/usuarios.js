@@ -4,8 +4,9 @@ import { db } from "../config/firebaseAdmin.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
+  console.log("▶️ Llega POST /api/usuarios:", req.body);
   const { uid, nombre, rol } = req.body;
- console.log("▶️ Llega POST /api/usuarios:", req.body);
+
   if (!uid || !nombre || !rol) {
     return res.status(400).json({ error: "Faltan campos requeridos." });
   }
