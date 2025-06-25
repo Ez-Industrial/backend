@@ -6,7 +6,6 @@ if (!admin.apps.length) {
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://wash-wheels.firebaseio.com"
   });
-  console.log("🔥 Firebase Admin inicializado correctamente.");
 }
 
 const db = admin.firestore();

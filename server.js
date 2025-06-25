@@ -1,4 +1,3 @@
-console.log("▶️ server.js arrancó");
 import express from "express";
 import cors from "cors";
 import { db } from "./config/firebaseAdmin.js";
@@ -24,7 +23,6 @@ const usuarioSchema = Joi.object({
 
 //Rutas
 app.get('/', (req, res) => {
- console.log('R');
  res.send("<h1>¡Bienvenido a WashWheels en Vercel!</h1><p>El backend está funcionando correctamente.</p>");
 });
 

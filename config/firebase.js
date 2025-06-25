@@ -1,4 +1,3 @@
-console.log("▶️  [firebase.js] arrancó");
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -22,5 +21,3 @@ export const serviceAccount = JSON.parse(
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-console.log("📦 serviceAccount:", typeof serviceAccount !== "undefined" ? "OK" : "undefined");
