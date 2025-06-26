@@ -23,7 +23,6 @@ router.post("/", async (req, res) => {
         rol,
         actualizado: new Date()
       });
-
       return res.status(200).json({ message: "Usuario actualizado correctamente." });
     }
 
@@ -35,12 +34,25 @@ router.post("/", async (req, res) => {
       rol,
       creado: new Date()
     });
-
-    res.status(201).json({ message: "Usuario nuevo guardado con éxito." });
+    return res.status(201).json({ message: "Usuario nuevo guardado con éxito." });
 
   } catch (error) {
     console.error("❌ Error al guardar/actualizar usuario:", error);
-    res.status(500).json({ error: "Error del servidor." });
+    return res.status(500).json({ error: "Error del servidor." });
   }
 });
+router.get("/", async (req, res) => {
+  try {
+    const snapshot = await db.collection("usuarios").get();
+    const usuarios = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    return res.status(200).json(usuarios);
+  } catch (error) {
+    console.error("❌ Error obteniendo usuarios:", error);
+    return res.status(500).json({ error: "No se pudieron obtener los usuarios." });
+  }
+});
+
 export default router;
