@@ -13,7 +13,7 @@ export async function authenticate(req, res, next) {
     req.user = {
       uid: decoded.uid,
       email: decoded.email,
-      role: decoded.role || "user"
+      rol: decoded.rol || "user"
     };
     next();
   } catch (err) {
@@ -22,11 +22,10 @@ export async function authenticate(req, res, next) {
   }
 }
 
-// Middleware para chequear roles
-export function authorizeRoles(...allowedRoles) { // plural
+export function authorizeRoles(...allowedRoles) {
   return (req, res, next) => {
-    if (!req.user || !allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ error: "Forbidden: insufficient role" });
+    if (!req.user || !allowedRoles.includes(req.user.rol)) {
+      return res.status(403).json({ error: "Forbidden: insufficient rol" });
     }
     next();
   };
