@@ -54,5 +54,22 @@ router.get("/", async (req, res) => {
     return res.status(500).json({ error: "No se pudieron obtener los usuarios." });
   }
 });
+router.get("/:uid", async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const snap = await db
+      .collection("usuarios")
+      .where("uid", "==", uid)
+      .limit(1)
+      .get();
 
+    if (snap.empty) return res.status(404).json({ error: "Usuario no encontrado" });
+
+    const doc = snap.docs[0];
+    return res.status(200).json({ id: doc.id, ...doc.data() });
+  } catch (err) {
+    console.error("Error GET /api/usuarios/:uid", err);
+    res.status(500).json({ error: "Error del servidor" });
+  }
+});
 export default router;
