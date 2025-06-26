@@ -4,8 +4,9 @@ import { db } from "../config/firebaseAdmin.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  console.log("▶️ Llega POST /api/usuarios:", req.body);
   const { uid, nombre, email, rol } = req.body;
+  const userRef = db.collection("usuarios").doc(uid);
+
   if (!uid || !nombre || !email || !rol) {
     return res.status(400).json({ error: "Faltan campos requeridos." });}
 
@@ -52,15 +53,16 @@ router.get("/", async (req, res) => {
 router.get("/:uid", async (req, res) => {
   try {
     const { uid } = req.params;
+    const docRef = db.collection("usuarios").doc(uid);
     const snap = await db
       .collection("usuarios")
       .where("uid", "==", uid)
       .limit(1)
       .get();
 
-    if (snap.empty) return res.status(404).json({ error: "Usuario no encontrado" });
+    if (!snap.exists) 
+      return res.status(404).json({ error: "Usuario no encontrado" });
 
-    const doc = snap.docs[0];
     return res.status(200).json({ id: doc.id, ...doc.data() });
   } catch (err) {
     console.error("Error GET /api/usuarios/:uid", err);
