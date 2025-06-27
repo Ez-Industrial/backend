@@ -54,7 +54,8 @@ router.get("/:uid", async (req, res) => {
   try {
     const { uid } = req.params;
     const userRef = db.collection("usuarios").doc(uid);
-    const snap = await userRef.get();
+    const snap    = await userRef.get();
+
     if (!snap.exists) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
@@ -63,8 +64,8 @@ router.get("/:uid", async (req, res) => {
       id:   snap.id,
       ...snap.data()
     });
-  } catch (error) {
-    console.error("Error GET /api/usuarios/:uid", error);
+  } catch (err) {
+    console.error("Error GET /api/usuarios/:uid", err);
     return res.status(500).json({ error: "Error del servidor" });
   }
 });
