@@ -1,3 +1,4 @@
+//auth.js
 import { admin } from "../config/firebaseAdmin.js";
 
 export async function authenticate(req, res, next) {

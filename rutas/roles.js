@@ -1,4 +1,4 @@
-
+//roles.js
 import express from "express";
 import { authenticate, authorizeRoles } from "../middlewares/auth.js";
 const router = express.Router();
@@ -7,11 +7,12 @@ import { admin, db } from "../config/firebaseAdmin.js";
 export async function asignarRol(uid, rol) {
   try {
     // 🔐 Asignar el custom claim
-    await admin.auth().setCustomUserClaims(uid, { role: rol });
+    await admin.auth().setCustomUserClaims(uid, rol);
     console.log(`✅ Rol "${rol}" asignado como claim`);
 
     // 🔎 Buscar el documento en Firestore con ese UID
-    const snapshot = await db.collection("usuarios").where("uid", "==", uid).get();
+    const snapshot = await db.collection("usuarios")
+    .where("uid", "==", uid).get();
 
     if (!snapshot.empty) {
       const docId = snapshot.docs[0].id;

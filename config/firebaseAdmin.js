@@ -1,3 +1,4 @@
+//firebaseAdmin.js
 import admin from "firebase-admin";
 import { serviceAccount } from "./firebase.js";
 

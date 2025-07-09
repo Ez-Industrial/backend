@@ -1,9 +1,11 @@
+//usuarios.js
 import express from "express";
 import { db } from "../config/firebaseAdmin.js";
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
+  console.log("POST /api/usuarios body:", req.body);
   const { uid, nombre, email, rol } = req.body;
   const userRef = db.collection("usuarios").doc(uid);
 
