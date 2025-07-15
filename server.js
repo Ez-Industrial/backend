@@ -29,7 +29,7 @@ const usuarioSchema = Joi.object({
 
 //Rutas
 app.get('/', (req, res) => {
- res.send("<h1>¡Bienvenido a WashWheels en Vercel!</h1><p>El backend está funcionando correctamente.</p>");
+ res.send("<h1>¡Bienvenido a WashWheels en Vercel! lap</h1><p>El backend está funcionando correctamente.</p>");
 });
 
 app.use("/api/usuarios", usuariosRoutes);
